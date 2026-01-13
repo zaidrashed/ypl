@@ -1,0 +1,21 @@
+# Render Deployment Configuration
+# ملف التوزيع على Render
+
+services:
+  - type: web
+    name: shipsy-econnect-shopify
+    plan: free
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+
+  - type: pserv
+    name: shipsy-econnect-db
+    plan: free
+    dbName: shipsy_econnect
+    user: avnadmin

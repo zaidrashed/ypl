@@ -7,20 +7,23 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "dev": "shopify app dev",
+    "dev": "nodemon server-oauth.js",
+    "start": "node server-oauth.js",
+    "start:legacy": "node server.js",
     "build": "shopify app build",
-    "deploy": "shopify app deploy",
-    "start": "node server.js"
+    "deploy": "shopify app deploy"
   },
   "dependencies": {
     "@shopify/app": "^3.50.0",
     "@shopify/cli": "^3.50.0",
+    "pg": "^8.11.0",
     "express": "^4.18.2",
     "dotenv": "^16.3.1",
     "axios": "^1.6.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "node-cron": "^3.0.2"
+    "node-cron": "^3.0.2",
+    "crypto": "^1.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
