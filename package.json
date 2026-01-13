@@ -1,0 +1,28 @@
+{
+  "name": "shipsy-econnect-shopify",
+  "version": "1.0.0",
+  "description": "Shipsy Econnect Integration for Shopify - Sync orders with Shipsy shipping platform",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "shopify app dev",
+    "build": "shopify app build",
+    "deploy": "shopify app deploy",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@shopify/app": "^3.50.0",
+    "@shopify/cli": "^3.50.0",
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "node-cron": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

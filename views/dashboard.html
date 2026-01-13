@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة تحكم Shipsy Econnect</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.rtl.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .dashboard-container {
+        padding: 20px;
+      }
+
+      .card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+      }
+
+      .stat-card {
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        margin-bottom: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-number {
+        font-size: 32px;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .stat-label {
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .btn-action {
+        margin: 5px;
+      }
+
+      .table-hover tbody tr:hover {
+        background-color: #f5f5f5;
+      }
+
+      .status-badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .status-synced {
+        background-color: #d4edda;
+        color: #155724;
+      }
+
+      .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+
+      .status-failed {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Navigation -->
+      <nav
+        class="navbar navbar-expand-lg navbar-dark bg-dark mb-4"
+        style="
+          background: linear-gradient(
+            135deg,
+            #667eea 0%,
+            #764ba2 100%
+          ) !important;
+        "
+      >
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <i class="fa fa-ship"></i> Shipsy Econnect
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link active" href="/admin">لوحة التحكم</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/sync-history">سجل المزامنة</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/settings">الإعدادات</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="container-fluid">
+        <!-- Page Title -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <h1 class="text-white mb-2">لوحة التحكم</h1>
+            <p class="text-white-50">
+              مرحباً بك في تطبيق Shipsy Econnect لمزامنة الطلبات
+            </p>
+          </div>
+        </div>
+
+        <!-- Statistics Row -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-number" id="stat-total">0</div>
+              <div class="stat-label">إجمالي الطلبات</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-number text-success" id="stat-synced">0</div>
+              <div class="stat-label">طلبات مزامنة</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-number text-warning" id="stat-pending">0</div>
+              <div class="stat-label">طلبات معلقة</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-number text-info" id="stat-completed">0</div>
+              <div class="stat-label">طلبات مكتملة</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions Row -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">إجراءات سريعة</h5>
+              </div>
+              <div class="card-body">
+                <button
+                  class="btn btn-primary btn-action"
+                  id="btn-sync-all"
+                  onclick="syncAllOrders()"
+                >
+                  <i class="fa fa-refresh"></i> مزامنة جميع الطلبات
+                </button>
+                <button class="btn btn-info btn-action" onclick="loadStats()">
+                  <i class="fa fa-bar-chart"></i> تحديث الإحصائيات
+                </button>
+                <button
+                  class="btn btn-secondary btn-action"
+                  href="/admin/settings"
+                >
+                  <i class="fa fa-cog"></i> الإعدادات
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">آخر الطلبات</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>رقم الطلب</th>
+                        <th>العميل</th>
+                        <th>القيمة</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                      </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                      <tr>
+                        <td colspan="6" class="text-center text-muted">
+                          جاري تحميل البيانات...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // تحميل الإحصائيات
+      async function loadStats() {
+        try {
+          const response = await fetch("/admin/api/stats");
+          const result = await response.json();
+
+          if (result.success) {
+            document.getElementById("stat-total").textContent =
+              result.data.total;
+            document.getElementById("stat-synced").textContent =
+              result.data.synced;
+            document.getElementById("stat-pending").textContent =
+              result.data.pending;
+            document.getElementById("stat-completed").textContent =
+              result.data.completed;
+          }
+        } catch (error) {
+          console.error("Error loading stats:", error);
+        }
+      }
+
+      // مزامنة جميع الطلبات
+      async function syncAllOrders() {
+        const btn = document.getElementById("btn-sync-all");
+        btn.disabled = true;
+        btn.innerHTML =
+          '<i class="fa fa-spinner fa-spin"></i> جاري المزامنة...';
+
+        try {
+          const response = await fetch("/api/orders/sync-all", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ limit: 50 }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            alert(`تم مزامنة ${result.data.synced} طلب بنجاح`);
+            loadStats();
+            loadOrders();
+          } else {
+            alert("فشل المزامنة: " + result.error);
+          }
+        } catch (error) {
+          alert("حدث خطأ: " + error.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa fa-refresh"></i> مزامنة جميع الطلبات';
+        }
+      }
+
+      // تحميل الطلبات
+      async function loadOrders() {
+        try {
+          const response = await fetch("/api/orders?limit=10");
+          const result = await response.json();
+
+          if (result.success && result.data.length > 0) {
+            const tbody = document.getElementById("orders-table-body");
+            tbody.innerHTML = result.data
+              .map(
+                (order, index) => `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>#${order.order_number}</td>
+                            <td>${order.customer?.first_name || "Unknown"}</td>
+                            <td>${order.total_price} ${order.currency}</td>
+                            <td>
+                                <span class="status-badge ${
+                                  order.note && order.note.includes("SHIPSY_ID")
+                                    ? "status-synced"
+                                    : "status-pending"
+                                }">
+                                    ${
+                                      order.note &&
+                                      order.note.includes("SHIPSY_ID")
+                                        ? "مزامنة"
+                                        : "معلقة"
+                                    }
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-info" onclick="viewOrder(${
+                                  order.id
+                                })">عرض</button>
+                            </td>
+                        </tr>
+                    `
+              )
+              .join("");
+          } else {
+            document.getElementById("orders-table-body").innerHTML =
+              '<tr><td colspan="6" class="text-center text-muted">لا توجد طلبات</td></tr>';
+          }
+        } catch (error) {
+          console.error("Error loading orders:", error);
+        }
+      }
+
+      // عرض تفاصيل الطلب
+      function viewOrder(orderId) {
+        alert("سيتم فتح صفحة الطلب قريباً: " + orderId);
+      }
+
+      // تحميل البيانات الأولية
+      window.addEventListener("DOMContentLoaded", () => {
+        loadStats();
+        loadOrders();
+      });
+    </script>
+  </body>
+</html>

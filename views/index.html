@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shipsy Econnect - تطبيق مزامنة الشحن</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.rtl.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .welcome-container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        padding: 50px;
+        max-width: 600px;
+        text-align: center;
+      }
+
+      .welcome-icon {
+        font-size: 60px;
+        color: #667eea;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+        font-weight: bold;
+      }
+
+      .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 16px;
+      }
+
+      .feature-list {
+        text-align: right;
+        margin: 30px 0;
+      }
+
+      .feature-item {
+        padding: 10px 0;
+        color: #555;
+        border-bottom: 1px solid #eee;
+      }
+
+      .feature-item:last-child {
+        border-bottom: none;
+      }
+
+      .feature-item i {
+        color: #28a745;
+        margin-left: 10px;
+      }
+
+      .btn-group-custom {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 12px 30px;
+        font-size: 16px;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .version {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        color: white;
+        font-size: 12px;
+      }
+
+      .status-card {
+        background: #f8f9fa;
+        border-left: 4px solid #28a745;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 5px;
+        text-align: right;
+      }
+
+      .status-card .status-label {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .status-card .status-value {
+        color: #28a745;
+        font-weight: bold;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="welcome-container">
+      <div class="welcome-icon">
+        <i class="fa fa-ship"></i>
+      </div>
+
+      <h1>Shipsy Econnect</h1>
+      <p class="subtitle">
+        تطبيق متقدم لمزامنة طلبات الشحن من Shopify إلى منصة Shipsy
+      </p>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <i class="fa fa-check-circle"></i>
+          مزامنة تلقائية للطلبات
+        </div>
+        <div class="feature-item">
+          <i class="fa fa-check-circle"></i>
+          تحديث حالات الشحن
+        </div>
+        <div class="feature-item">
+          <i class="fa fa-check-circle"></i>
+          توليد بطاقات الشحن
+        </div>
+        <div class="feature-item">
+          <i class="fa fa-check-circle"></i>
+          لوحة تحكم متقدمة
+        </div>
+        <div class="feature-item">
+          <i class="fa fa-check-circle"></i>
+          تتبع شامل للعمليات
+        </div>
+      </div>
+
+      <div class="status-card">
+        <div class="status-label">حالة الاتصال:</div>
+        <div class="status-value" id="connection-status">جاري الفحص...</div>
+      </div>
+
+      <div class="btn-group-custom">
+        <a href="/admin" class="btn btn-primary btn-lg">
+          <i class="fa fa-dashboard"></i> اذهب إلى لوحة التحكم
+        </a>
+        <a href="/admin/settings" class="btn btn-secondary btn-lg">
+          <i class="fa fa-cog"></i> الإعدادات
+        </a>
+      </div>
+    </div>
+
+    <div class="version">
+      <div>Shipsy Econnect v1.0.0</div>
+      <div>© 2024 - All Rights Reserved</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      async function checkStatus() {
+        try {
+          const response = await fetch("/health");
+          const data = await response.json();
+
+          if (response.ok) {
+            document.getElementById("connection-status").textContent =
+              "✅ متصل";
+            document.getElementById("connection-status").style.color =
+              "#28a745";
+          } else {
+            document.getElementById("connection-status").textContent =
+              "❌ غير متصل";
+            document.getElementById("connection-status").style.color =
+              "#dc3545";
+          }
+        } catch (error) {
+          document.getElementById("connection-status").textContent =
+            "❌ خطأ في الاتصال";
+          document.getElementById("connection-status").style.color = "#dc3545";
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", checkStatus);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+scopes = "write_orders,read_orders,write_products,read_products,write_fulfillments,read_fulfillments"
+
+[build]
+  command = "npm run build"
+  cwd = "."
+
+[webhooks]
+  api_version = "2024-01"
+
+  [[webhooks.subscriptions]]
+  topics = ["orders/create", "orders/updated"]
+  uri = "/api/webhooks/orders"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/uninstalled"]
+  uri = "/api/webhooks/app-uninstalled"
